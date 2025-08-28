@@ -8,11 +8,11 @@
 #include <vector>
 
 using namespace std;
-
+//workspace 
 static int NAV_POSLLH(uint8_t *buffer, classId *gps) {
-  memcpy(&gps->iTOW, buffer, 4);
-  memcpy(&gps->lon, buffer, 4);
-  memcpy(&gps->lat, buffer, 4);
+  memcpy(&gps->iTOW, buffer + 0, 4);
+  memcpy(&gps->lon, buffer + 4, 4);
+  memcpy(&gps->lat, buffer + 8, 4);
   memcpy(&gps->height, buffer + 12, 4);
   memcpy(&gps->hMSL, buffer + 16, 4);
   memcpy(&gps->hAcc, buffer + 20, 4);
@@ -31,11 +31,12 @@ static vector<uint8_t> hexToBytes(const string &rawHex) {
 }
 
 int decodeUBX(uint8_t *buffer, classId *gps) {
-  // buffer points at class field
-  if (buffer[30] == 0x01 && buffer[32] == 0x02) { // Class = NAV, ID = POSLLH
-    return NAV_POSLLH(buffer + 4, gps);         // skip length
-  }
-  return 1;
+    // buffer[0] = class, buffer[1] = id, buffer[2-3] = length
+    if (buffer[0] == 0x01 && buffer[1] == 0x02) { // NAV-POSLLH
+        // Payload starts right after class+id+len = 4 bytes
+        return NAV_POSLLH(buffer + 4, gps);
+    }
+    return 1; // not supported
 }
 
 GPS gpsFromData(const classId &gps) {

@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "gridmap.h"
 #include <iostream>
 
@@ -12,9 +14,9 @@ Gridmapper::Gridmapper(GPS origin, double cellsize, int rows, int cols)
 
 pair<int, int> Gridmapper::gpstogrid(const GPS &point) const {
   double lat_m = (point.lat - origin.lat) * 111320.0;
-  double lon_m =
+  double lon_m = 
       (point.lon - origin.lon) * (111320.0 * cos(deg2rad(origin.lat)));
-
+              
   int row = static_cast<int>(std::floor(lat_m / cellsize));
   int col = static_cast<int>(std::floor(lon_m / cellsize));
 
@@ -28,7 +30,6 @@ double Gridmapper::deg2rad(double deg) { return deg * M_PI / 180.0; }
 bool Gridmapper::isvalid(int row, int col) const {
   return (row >= 0 && row < rows && col >= 0 && col < cols);
 }
-
 void Gridmapper::makemap() {
   for (int r = 3; r < 8; r++) {
     this->grid[r][2] = true; // vertical wall
@@ -37,6 +38,7 @@ void Gridmapper::makemap() {
     this->grid[6][c] = true; // horizontal wall
   }
 }
+
 
 void Gridmapper::printgrid() const {
   cout << "The grid map is: " << endl;
@@ -47,3 +49,16 @@ void Gridmapper::printgrid() const {
     cout << endl;
   }
 }
+        
+
+
+
+
+
+
+
+
+
+
+
+

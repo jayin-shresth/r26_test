@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include "gridmap.h"
 #include "odometry.h"
 #include "planning.h"
@@ -6,21 +7,26 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
 // Helper to convert angle to unit direction
+
 pair<double, double> directionFromAngle(double angle_deg) {
   double rad = angle_deg * M_PI / 180.0;
   return {cos(rad), sin(rad)};
+
 }
 
 int main(int argc, char *argv[]) {
 
-  if (argc < 2) {
-    cerr << "Usage: " << argv[0] << " <gps_data_file>" << endl;
+
+  if (argc < 3) {
+    cerr << "Usage: " << argv[0] << " <gps_data_file> <odom_commands_output_file>" << endl;
     return 1;
-  }
+}
 
   // store file path to GPS data
   string gps_data = argv[1];
@@ -34,7 +40,9 @@ int main(int argc, char *argv[]) {
   {
     cout<<"Error: Invalid GPS Coordinates"<<endl;
     return 1;
+
   }
+
   cout << "Start -> Lat: " << result.first.lat << " Lon: " << result.first.lon
        << endl;
   cout << "Goal  -> Lat: " << result.second.lat << " Lon: " << result.second.lon
@@ -42,7 +50,7 @@ int main(int argc, char *argv[]) {
 
   // Initialize Gridmapper with start as origin
   GPS origin = {result.first.lat, result.first.lon};
-  double cellsize = 1.0; // meters per grid cell
+  double cellsize = 1.0; // meters per grid cell    
   int rows = 10, cols = 10;
   Gridmapper grid(origin, cellsize, rows, cols);
 
@@ -74,19 +82,28 @@ int main(int argc, char *argv[]) {
   auto commands = odo.computeCommands(path);
 
   // computing total time and sec
+    // computing total time and sec
   ofstream result_file(odom_commands);
 
-  // check if file is open
-  if (!result_file.is_open()) {
+// check if file is open
+if (!result_file.is_open()) {
     cerr << "Error: cannot open file " << odom_commands << endl;
     return 1;
-  }
+}
 
-  // writing result to file
-  result_file << commands.time_sec << endl << commands.angle_deg << endl;
+// --- writing result to file (trim trailing zeros properly) ---
+{
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(4) << commands.time_sec;
+    std::string time_str = oss.str();
 
-  // closing file
-  result_file.close();
+    // trim trailing zeros
+    time_str.erase(time_str.find_last_not_of('0') + 1, std::string::npos);
+    if (time_str.back() == '.') {
+        time_str.pop_back();
+    }
 
-  return 0;
+    result_file << time_str << "\n"
+                << static_cast<int>(round(commands.angle_deg)) << "\n";
+}
 }

@@ -29,9 +29,6 @@ private:
   double rpm;        // wheel rpm (constant)
   double linear_vel; // rover vel
 
-  double distance(int x1, int y1, int x2,
-                  int y2);                      // distance between two coords
-  double angle(int x1, int y1, int x2, int y2); // angle between two coords
 };
 
 #endif

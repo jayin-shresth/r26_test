@@ -32,4 +32,5 @@ private:
   void printgrid() const;
 };
 
+
 #endif

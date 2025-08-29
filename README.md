@@ -20,7 +20,15 @@ the whole code :
 
 
 
-another thing is while I was trying to run the code, it had some compilation errors so i copied the code to another folder and then copied it back to the R26_test folder, if there are any issues with compilation of this code, please refer to the following repo which works completely fine for me:
+another thing is while I was trying to run the code, it had some compilation errors so i copied the code to another folder and then copied it back to the R26_test folder, idk if this helps but if it shows an error saying
+
+
+ld.exe: cannot open output file my_program.exe: No such file or directory
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:9: my_program] Error 1
+
+
+please copy the folder contents and paste it into another folder and run the code, that will work.
 
 
 

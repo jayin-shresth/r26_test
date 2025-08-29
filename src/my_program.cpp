@@ -108,4 +108,4 @@ if (!result_file.is_open()) {
 }
 }
 
-//check readme file for the logic and breif explanation of the code
+//check readme file for the logic and breif explanation of the code.

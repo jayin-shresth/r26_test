@@ -42,4 +42,4 @@ MotionCommand Odometry::computeCommands(vector<pair<int, int>> &path) {
     return res;
 }
 
-//check readme file for the logic and breif explanation of the code
+//check readme file for the logic and breif explanation of the code.

@@ -50,7 +50,7 @@ void Gridmapper::printgrid() const {
   }
 }
 
-//check readme file for the logic and breif explanation of the code
+//check readme file for the logic and breif explanation of the code.
         
 
 
